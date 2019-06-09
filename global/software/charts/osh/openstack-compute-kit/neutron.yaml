@@ -208,6 +208,7 @@ data:
     post:
       create: []
   test:
+    enabled: false
     timeout: 500
   wait:
     labels:

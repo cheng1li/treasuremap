@@ -58,20 +58,60 @@ metadata:
   storagePolicy: cleartext
 data:
   # NEWSITE-CHANGEME: Update with the site's out-of-band CIDR
-  cidr: 10.22.104.0/24
-  routes:
-    # NEWSITE-CHANGEME: Update with the site's out-of-band gateway IP
-    - subnet: '0.0.0.0/0'
-      gateway: 10.22.104.1
-      metric: 100
+  cidr: 192.168.129.0/24
   # NEWSITE-CHANGEME: Update with the site's out-of-band IP allocation range
   # FIXME: Is this IP range actually used/allocated for anything? The HW already
   # has its OOB IPs assigned. None of the Ubuntu OS's should need IPs on OOB
   # network either, as they should be routable via the default gw on OAM network
   ranges:
     - type: static
-      start: 10.22.104.21
-      end: 10.22.104.22
+      start: 192.168.129.1
+      end: 192.168.129.2
+...
+---
+schema: 'drydock/NetworkLink/v1'
+metadata:
+  schema: 'metadata/Document/v1'
+  name: nat
+  layeringDefinition:
+    abstract: false
+    layer: site
+  storagePolicy: cleartext
+data:
+  # MaaS doesnt own this network like it does the others, so the noconfig label
+  # is specified.
+  labels:
+    noconfig: enabled
+  bonding:
+    mode: disabled
+  mtu: 1500
+  linkspeed: auto
+  trunking:
+    mode: disabled
+    default_network: nat
+  allowed_networks:
+    - nat
+...
+---
+schema: 'drydock/Network/v1'
+metadata:
+  schema: 'metadata/Document/v1'
+  name: nat
+  layeringDefinition:
+    abstract: false
+    layer: site
+  storagePolicy: cleartext
+data:
+  # NEWSITE-CHANGEME: Update with the site's out-of-band CIDR
+  cidr: 192.168.121.0/24
+  # NEWSITE-CHANGEME: Update with the site's out-of-band IP allocation range
+  # FIXME: Is this IP range actually used/allocated for anything? The HW already
+  # has its OOB IPs assigned. None of the Ubuntu OS's should need IPs on OOB
+  # network either, as they should be routable via the default gw on OAM network
+  ranges:
+    - type: static
+      start: 192.168.121.20
+      end: 192.168.121.40
 ...
 ---
 schema: 'drydock/NetworkLink/v1'
@@ -105,11 +145,11 @@ metadata:
 data:
   # NEWSITE-CHANGEME: Update with the site's PXE network CIDR
   # NOTE: The CIDR minimum size = (number of nodes * 2) + 10
-  cidr: 10.22.70.0/24
+  cidr: 192.168.123.0/24
   routes:
     - subnet: 0.0.0.0/0
       # NEWSITE-CHANGEME: Set the OAM network gateway IP address
-      gateway: 10.22.70.1
+      gateway: 192.168.123.1
       metric: 100
   # NOTE: The first 10 IPs in the subnet are reserved for network infrastructure.
   # The remainder of the range is divided between two subnets of equal size:
@@ -122,18 +162,18 @@ data:
   ranges:
     # NEWSITE-CHANGEME: Update to the first 10 IPs in the CIDR
     - type: reserved
-      start: 10.22.70.1
-      end: 10.22.70.10
+      start: 192.168.123.1
+      end: 192.168.123.10
     # NEWSITE-CHANGEME: Update to the first half of the remaining range after
     # excluding the 10 reserved IPs.
     - type: static
-      start: 10.22.70.21
-      end: 10.22.70.31
+      start: 192.168.123.21
+      end: 192.168.123.31
     # NEWSITE-CHANGEME: Update to the second half of the remaining range after
     # excluding the 10 reserved IPs.
     - type: dhcp
-      start: 10.22.70.40
-      end: 10.22.70.80
+      start: 192.168.123.40
+      end: 192.168.123.80
   dns:
     # NEWSITE-CHANGEME: FQDN for bare metal nodes.
     # Choose FQDN according to the node FQDN naming conventions at the top of
@@ -142,7 +182,7 @@ data:
     # List of upstream DNS forwards. Verify you can reach them from your
     # environment. If so, you should not need to change them.
     # TODO: This should be populated via substitution from common-addresses
-    servers: '8.8.8.8,8.8.4.4,208.67.222.222'
+    servers: '10.248.2.5,10.239.27.228,172.17.6.9'
 ...
 ---
 schema: 'drydock/NetworkLink/v1'
@@ -181,22 +221,22 @@ data:
   mtu: 1500
   # NEWSITE-CHANGEME: Set the CIDR for the OAM network
   # NOTE: The CIDR minimum size = number of nodes + 10
-  cidr: 10.22.71.0/24
-  routes:
-    - subnet: 0.0.0.0/0
-      # NEWSITE-CHANGEME: Set the OAM network gateway IP address
-      gateway: 10.22.71.1
-      metric: 100
+  cidr: 192.168.124.0/24
+#  routes:
+#    - subnet: 0.0.0.0/0
+#      # NEWSITE-CHANGEME: Set the OAM network gateway IP address
+#      gateway: 192.168.124.1
+#      metric: 100
   ranges:
     # NEWSITE-CHANGEME: Update to the first 10 IPs in the CIDR
     - type: reserved
-      start: 10.22.71.1
-      end: 10.22.71.10
+      start: 192.168.124.1
+      end: 192.168.124.10
     # NEWSITE-CHANGEME: Update to the remaining range after excluding the 10
     # 10 reserved IPs.
     - type: static
-      start: 10.22.71.21
-      end: 10.22.71.31
+      start: 192.168.124.21
+      end: 192.168.124.31
   dns:
     # NEWSITE-CHANGEME: FQDN for bare metal nodes.
     # Choose FQDN according to the node FQDN naming conventions at the top of
@@ -205,7 +245,7 @@ data:
     # List of upstream DNS forwards. Verify you can reach them from your
     # environment. If so, you should not need to change them.
     # TODO: This should be populated via substitution from common-addresses
-    servers: '8.8.8.8,8.8.4.4'
+    servers: '10.248.2.5,10.239.27.228,172.17.6.9'
 ...
 ---
 schema: 'drydock/Network/v1'
@@ -222,17 +262,17 @@ data:
   mtu: 1500
   # NEWSITE-CHANGEME: Set the CIDR for the calico network
   # NOTE: The CIDR minimum size = number of nodes + 10
-  cidr: 10.22.72.0/24
+  cidr: 192.168.125.0/24
   ranges:
     # NEWSITE-CHANGEME: Update to the first 10 IPs in the CIDR
     - type: reserved
-      start: 10.22.72.1
-      end: 10.22.72.10
+      start: 192.168.125.1
+      end: 192.168.125.10
     # NEWSITE-CHANGEME: Update to the remaining range after excluding the 10
     # 10 reserved IPs.
     - type: static
-      start: 10.22.72.21
-      end: 10.22.72.31
+      start: 192.168.125.21
+      end: 192.168.125.31
 ...
 ---
 schema: 'drydock/Network/v1'
@@ -249,17 +289,17 @@ data:
   mtu: 1500
   # NEWSITE-CHANGEME: Set the CIDR for the storage network
   # NOTE: The CIDR minimum size = number of nodes + 10
-  cidr: 10.22.73.0/24
+  cidr: 192.168.126.0/24
   ranges:
     # NEWSITE-CHANGEME: Update to the first 10 IPs in the CIDR
     - type: reserved
-      start: 10.22.73.1
-      end: 10.22.73.10
+      start: 192.168.126.1
+      end: 192.168.126.10
     # NEWSITE-CHANGEME: Update to the remaining range after excluding the 10
     # 10 reserved IPs.
     - type: static
-      start: 10.22.73.21
-      end: 10.22.73.31
+      start: 192.168.126.21
+      end: 192.168.126.31
 ...
 ---
 schema: 'drydock/Network/v1'
@@ -276,15 +316,15 @@ data:
   mtu: 1500
   # NEWSITE-CHANGEME: Set the CIDR for the overlay network
   # NOTE: The CIDR minimum size = number of nodes + 10
-  cidr: 10.22.74.0/24
+  cidr: 192.168.127.0/24
   ranges:
     # NEWSITE-CHANGEME: Update to the first 10 IPs in the CIDR
     - type: reserved
-      start: 10.22.74.1
-      end: 10.22.74.10
+      start: 192.168.127.1
+      end: 192.168.127.10
     # NEWSITE-CHANGEME: Update to the remaining range after excluding the 10
     # 10 reserved IPs.
     - type: static
-      start: 10.22.74.21
-      end: 10.22.74.31
+      start: 192.168.127.21
+      end: 192.168.127.31
 ...

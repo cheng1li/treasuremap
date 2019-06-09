@@ -22,8 +22,14 @@ metadata:
 data:
   hardware_profile: dell_r720xd
 
-  primary_network: oam
+  primary_network: nat
   interfaces:
+    nat:
+      device_link: nat
+      slaves:
+        - nat_nic01
+      networks:
+        - nat
     pxe:
       device_link: pxe
       slaves:
@@ -42,7 +48,7 @@ data:
 
   storage:
     physical_devices:
-      bootdisk:
+      vda:
         labels:
           bootdrive: 'true'
         partitions:

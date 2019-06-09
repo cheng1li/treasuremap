@@ -40,10 +40,10 @@ data:
     - osh-infra-ingress-controller
     - osh-infra-ceph-config
     - osh-infra-radosgw
-    - osh-infra-logging
-    - osh-infra-monitoring
+#    - osh-infra-logging
+#    - osh-infra-monitoring
     - osh-infra-mariadb
-    - osh-infra-dashboards
+#    - osh-infra-dashboards
     - openstack-ingress-controller
     - openstack-ceph-config
     - openstack-tenant-ceph
@@ -52,9 +52,9 @@ data:
     - openstack-keystone
     - openstack-radosgw
     - openstack-glance
-    - openstack-cinder
+#    - openstack-cinder
     - openstack-compute-kit
-    - openstack-heat
-    - osh-infra-prometheus-openstack-exporter
-    - openstack-horizon
+#    - openstack-heat
+#    - osh-infra-prometheus-openstack-exporter
+#    - openstack-horizon
 ...

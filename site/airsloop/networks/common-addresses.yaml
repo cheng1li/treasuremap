@@ -21,7 +21,7 @@ data:
     # bond and VLAN number specified in networks/physical/networks.yaml for the Calico
     # network. E.g. VLAN 22 for the calico network as a member of bond0, you
     # would set "interface=bond0.22" as shown here.
-    ip_autodetection_method: interface=enp67s0f0.72
+    ip_autodetection_method: interface=ens6.72
     etcd:
       # etcd service IP address
       service_ip: 10.96.232.136
@@ -34,12 +34,12 @@ data:
     # List of upstream DNS forwards. Verify you can reach them from your
     # environment. If so, you should not need to change them.
     upstream_servers:
-      - 8.8.8.8
-      - 8.8.4.4
-      - 208.67.222.222
+      - 10.248.2.5
+      - 10.239.27.228
+      - 172.17.6.9
     # Repeat the same values as above, but formatted as a common separated
     # string
-    upstream_servers_joined: 8.8.8.8,8.8.4.4,208.67.222.222
+    upstream_servers_joined: 10.248.2.5,10.239.27.228,172.17.6.9
     # NEWSITE-CHANGEME: FQDN for ingress (i.e. "publicly facing" access point)
     # Choose FQDN according to the ingress/public FQDN naming conventions at
     # the top of this document.
@@ -54,12 +54,12 @@ data:
     hostname: airsloop-control-1
     # NEWSITE-CHANGEME: Calico IP of the Genesis node. Use the "start" value for
     # the calico network defined in networks/physical/networks.yaml for this IP.
-    ip: 10.22.72.21
+    ip: 192.168.125.21
 
   bootstrap:
     # NEWSITE-CHANGEME: Update with the "start" value/IP of the static range
     # defined for the pxe network in networks/physical/networks.yaml
-    ip: 10.22.70.21
+    ip: 192.168.123.21
 
   kubernetes:
     # K8s API service IP
@@ -83,9 +83,9 @@ data:
   # NEWSITE-CHANGEME: A list of nodes (apart from Genesis) which act as the
   # control plane servers. Ensure that this matches the nodes with the 'masters'
   # tags applied in baremetal/nodes.yaml
-  masters:
-    - hostname: airsloop-control-2
-    - hostname: airsloop-control-3
+  #masters:
+  #  - hostname: airsloop-control-2
+  #  - hostname: airsloop-control-3
 
   # NEWSITE-CHANGEME: Environment proxy information.
   # NOTE: Reference Airship sites do not deploy behind a proxy, so this proxy section
@@ -107,7 +107,7 @@ data:
     # comma separated NTP server list. Verify that these upstream NTP servers are
     # reachable in your environment; otherwise update them with the correct
     # values for your environment.
-    servers_joined: '0.ubuntu.pool.ntp.org,1.ubuntu.pool.ntp.org,2.ubuntu.pool.ntp.org,4.ubuntu.pool.ntp.org'
+    servers_joined: '10.239.12.37'
 
   # NOTE: This will be updated soon
   ldap:
@@ -133,22 +133,22 @@ data:
     ceph:
       # NEWSITE-CHANGEME: CIDRs for Ceph. Update to match the network CIDR
       # used for the `storage` network in networks/physical/networks.yaml
-      public_cidr: '10.22.73.0/24'
-      cluster_cidr: '10.22.73.0/24'
+      public_cidr: '192.168.126.0/24'
+      cluster_cidr: '192.168.126.0/24'
 
   neutron:
     # NEWSITE-CHANGEME: Overlay network for VM traffic. Ensure the bond name and
     # VLAN number are consistent with what's defined for the bond and the overlay
     # network in networks/physical/networks.yaml
-    tunnel_device: 'enp67s0f0.74'
+    tunnel_device: 'ens6.74'
     # bond which the overlay is a member of. Ensure the bond name is consistent
     # with the bond assigned to the overlay network in
     # networks/physical/networks.yaml
-    external_iface: 'enp67s0f0'
+    external_iface: 'ens6'
 
   openvswitch:
     # bond which the overlay is a member of. Ensure the bond name is consistent
     # with the bond assigned to the overlay network in
     # networks/physical/networks.yaml
-    external_iface: 'enp67s0f0'
+    external_iface: 'ens6'
 ...
